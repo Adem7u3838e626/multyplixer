@@ -4,31 +4,24 @@ use crossterm::{
 };
 use std::time::Duration;
 
-mod mods;
-fn main() {
+pub fn Nmode() {
     enable_raw_mode().unwrap();
-
+    print!("you are now in normal mode");
     loop {
         if event::poll(Duration::from_millis(50)).unwrap() {
             if let Event::Key(key) = event::read().unwrap() {
 
                 match (key.code, key.modifiers) {
-                    // for now you can close with Ctrl c
-                    (KeyCode::Char('c'), KeyModifiers::CONTROL) => {
-                        break;
+
+                    (KeyCode::Char('i'), KeyModifiers::NONE) => {
+                        println!("insert mode");
+                        return;
                     }
 
-                    (KeyCode::Char('s'), KeyModifiers::CONTROL) => {
-                        mods::normal::Nmode();
-                        println!("return to insert mode");
-                    }
-
+                    // they do nothing for now 
                     (KeyCode::Char(c), KeyModifiers::CONTROL) => {
-                        println!("Ctrl + {}", c);
                     }
-
                     (KeyCode::Char(c), KeyModifiers::NONE) => {
-                        println!("char: {}", c);
                     }
                     _ => {}
                 }
@@ -37,4 +30,3 @@ fn main() {
         }
     }
 }
-
